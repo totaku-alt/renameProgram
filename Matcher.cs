@@ -47,32 +47,27 @@ namespace RenamerProgram
             }
         }
 
-
-
-
-        public static object RecursiveFileRename(string rootFolderPath, string searchFile, string newFileName)
+        public static void RecursiveFileRename(string rootFolderPath, string searchFile, string newFileName)
         {
             // Process files in the current folder
             string[] files = Directory.GetFiles(rootFolderPath, searchFile);
-
             foreach (string filePath in files)
             {
-                string newFilePath = Path.Combine(rootFolderPath, newFileName);
+                string newFilePath = Path.Combine(Path.GetDirectoryName(filePath), newFileName);
                 File.Move(filePath, newFilePath);
 
             }
-
             // Process subfolders recursively
             string[] subfolders = Directory.GetDirectories(rootFolderPath);
             foreach (string subfolderPath in subfolders)
             {
-                if (!subfolderPath.EndsWith("\\test"))
-                {
-                    RecursiveFileRename(subfolderPath, searchFile, newFileName);
-                }
+                RecursiveFileRename(subfolderPath, searchFile, newFileName);                
             }
-            return files;
+            
         }
+
+
+        
 
         static void runTests()
         {
